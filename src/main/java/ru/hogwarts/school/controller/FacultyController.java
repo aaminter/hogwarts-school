@@ -22,7 +22,7 @@ public class FacultyController {
         return facultyService.createFaculty(faculty);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public Faculty getFaculty(@PathVariable Long id) {
         return facultyService.getFaculty(id);
     }
@@ -32,7 +32,7 @@ public class FacultyController {
         return facultyService.editFaculty(faculty);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public void deleteFaculty(@PathVariable Long id) {
         facultyService.deleteFaculty(id);
     }
@@ -41,6 +41,7 @@ public class FacultyController {
     public List<Faculty> getAllFaculties() {
         return facultyService.getAllFaculties();
     }
+
     @GetMapping("/color")
     public Collection<Faculty> findByColor(@RequestParam String color) {
         return facultyService.findByColor(color);
