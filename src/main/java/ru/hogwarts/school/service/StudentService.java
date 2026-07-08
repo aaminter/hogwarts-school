@@ -7,6 +7,7 @@ import ru.hogwarts.school.repository.StudentRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Collection;
 
 @Service
 public class StudentService {
@@ -37,5 +38,8 @@ public class StudentService {
 
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
+    }
+    public Collection<Student> findByAge(int age) {
+        return studentRepository.findByAge(age);
     }
 }
