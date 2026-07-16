@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
+import ru.hogwarts.school.model.Student;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,5 +43,20 @@ public class FacultyService {
 
     public Collection<Faculty> findByColor(String color) {
         return facultyRepository.findByColor(color);
+    }
+
+    public Collection<Faculty> findByNameOrColor(String value) {
+        return facultyRepository
+                .findByNameContainingIgnoreCaseOrColorContainingIgnoreCase(value, value);
+    }
+
+    public Collection<Student> getStudents(Long facultyId) {
+        Faculty faculty = facultyRepository.findById(facultyId).orElse(null);
+
+        if (faculty == null) {
+            return null;
+        }
+
+        return faculty.getStudents();
     }
 }
