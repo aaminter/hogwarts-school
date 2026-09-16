@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 import ru.hogwarts.school.model.Faculty;
-
+import org.springframework.http.ResponseEntity;
 import java.util.List;
 import java.util.Collection;
 
@@ -24,8 +24,14 @@ public class StudentController {
     }
 
     @GetMapping("/{id}")
-    public Student getStudent(@PathVariable Long id) {
-        return studentService.getStudent(id);
+    public ResponseEntity<Student> getStudent(@PathVariable Long id) {
+        Student student = studentService.getStudent(id);
+
+        if (student == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(student);
     }
 
     @PutMapping
@@ -52,7 +58,13 @@ public class StudentController {
     }
 
     @GetMapping("/{id}/faculty")
-    public Faculty getFaculty(@PathVariable Long id) {
-        return studentService.getFaculty(id);
+    public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
+        Faculty faculty = studentService.getFaculty(id);
+
+        if (faculty == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(faculty);
     }
 }
