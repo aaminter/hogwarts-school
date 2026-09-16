@@ -46,4 +46,18 @@ public class StudentController {
     public Collection<Student> findByAge(@RequestParam int age) {
         return studentService.findByAge(age);
     }
+
+    @GetMapping("/age/average")
+    public Double getAverageAge() {
+        return studentService.getAverageAge();
+    }
+
+    @GetMapping("/count")
+    public long getCountOfStudents() {
+        return studentService.getCountOfStudents();
+    }
+    @GetMapping("/last-five")
+    public List<Student> getLastFiveStudents() {
+        return studentService.getLastFiveStudents();
+    }
 }
