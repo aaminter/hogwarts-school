@@ -5,7 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
-
+import ru.hogwarts.school.model.Faculty;
+import org.springframework.http.ResponseEntity;
 import java.util.List;
 
 @RestController
@@ -23,12 +24,14 @@ public class StudentController {
         return studentService.createStudent(student);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Student> getStudentInfo(@PathVariable Long id) {
-        Student student = studentService.findStudent(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Student> getStudent(@PathVariable Long id) {
+        Student student = studentService.getStudent(id);
+
         if (student == null) {
             return ResponseEntity.notFound().build();
         }
+
         return ResponseEntity.ok(student);
     }
 
@@ -56,39 +59,22 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
 
-    @GetMapping("/count")
-    public Integer getStudentsCount() {
-        return studentService.getStudentsCount();
+    @GetMapping("/age")
+    public Collection<Student> findByAgeBetween(
+            @RequestParam int min,
+            @RequestParam int max) {
+
+        return studentService.findByAgeBetween(min, max);
     }
 
-    @GetMapping("/average-age")
-    public Double getAverageAge() {
-        return studentService.getAverageAge();
-    }
+    @GetMapping("/{id}/faculty")
+    public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
+        Faculty faculty = studentService.getFaculty(id);
 
-    @GetMapping("/last-five")
-    public List<Student> getLastFiveStudents() {
-        return studentService.getLastFiveStudents();
-    }
+        if (faculty == null) {
+            return ResponseEntity.notFound().build();
+        }
 
-    @GetMapping("/all-by-letter-a")
-    public ResponseEntity<List<String>> getAllStudentsStartingWithA() {
-        return ResponseEntity.ok(studentService.getAllStudentsStartingWithA());
-    }
-
-    @GetMapping("/average-age-stream")
-    public ResponseEntity<Double> getAverageAgeWithStream() {
-        return ResponseEntity.ok(studentService.getAverageAgeWithStream());
-    }
-    @GetMapping("/print-parallel")
-    public ResponseEntity<Void> printStudentsParallel() {
-        studentService.printStudentsThreads();
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/print-synchronized")
-    public ResponseEntity<Void> printStudentsSynchronized() {
-        studentService.printStudentsSynchronized();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(faculty);
     }
 }

@@ -4,7 +4,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.service.FacultyService;
-
+import ru.hogwarts.school.model.Student;
+import org.springframework.http.ResponseEntity;
+import java.util.List;
 import java.util.Collection;
 
 @RestController
@@ -22,12 +24,14 @@ public class FacultyController {
         return facultyService.createFaculty(faculty);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Faculty> getFacultyInfo(@PathVariable Long id) {
-        Faculty faculty = facultyService.findFaculty(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
+        Faculty faculty = facultyService.getFaculty(id);
+
         if (faculty == null) {
             return ResponseEntity.notFound().build();
         }
+
         return ResponseEntity.ok(faculty);
     }
 
@@ -60,4 +64,19 @@ public class FacultyController {
         return ResponseEntity.ok(facultyService.getLongestFacultyName());
     }
 
+    @GetMapping("/search")
+    public Collection<Faculty> findFaculty(@RequestParam String value) {
+        return facultyService.findByNameOrColor(value);
+    }
+
+    @GetMapping("/{id}/students")
+    public ResponseEntity<Collection<Student>> getStudents(@PathVariable Long id) {
+        Collection<Student> students = facultyService.getStudents(id);
+
+        if (students == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(students);
+    }
 }

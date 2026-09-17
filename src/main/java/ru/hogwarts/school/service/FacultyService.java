@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
+import ru.hogwarts.school.model.Student;
 
 import java.util.Collection;
 
@@ -48,17 +49,18 @@ public class FacultyService {
         return facultyRepository.findByColor(color);
     }
 
-    public Collection<Faculty> findByNameOrColor(String name, String color) {
-        logger.info("Was invoked method for find faculties by name = {} or color = {}", name, color);
-        return facultyRepository.findByNameIgnoreCaseOrColorIgnoreCase(name, color);
+    public Collection<Faculty> findByNameOrColor(String value) {
+        return facultyRepository
+                .findByNameContainingIgnoreCaseOrColorContainingIgnoreCase(value, value);
     }
 
-    public String getLongestFacultyName() {
-        logger.info("Was invoked method for getting longest faculty name");
-        return facultyRepository.findAll().stream()
-                .map(Faculty::getName)
-                .max((name1, name2) -> Integer.compare(name1.length(), name2.length()))
-                .orElse("");
-    }
+    public Collection<Student> getStudents(Long facultyId) {
+        Faculty faculty = facultyRepository.findById(facultyId).orElse(null);
 
+        if (faculty == null) {
+            return null;
+        }
+
+        return faculty.getStudents();
+    }
 }
