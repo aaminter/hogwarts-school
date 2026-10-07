@@ -1,47 +1,51 @@
 package ru.hogwarts.school.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 import ru.hogwarts.school.model.Student;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.Collection;
 
 @Service
 public class FacultyService {
 
+    private final Logger logger = LoggerFactory.getLogger(FacultyService.class);
     private final FacultyRepository facultyRepository;
 
-    @Autowired
     public FacultyService(FacultyRepository facultyRepository) {
         this.facultyRepository = facultyRepository;
     }
 
     public Faculty createFaculty(Faculty faculty) {
+        logger.info("Was invoked method for create faculty");
         return facultyRepository.save(faculty);
     }
 
-    public Faculty getFaculty(Long id) {
-        Optional<Faculty> faculty = facultyRepository.findById(id);
-        return faculty.orElse(null);
+    public Faculty findFaculty(long id) {
+        logger.info("Was invoked method for find faculty with id = {}", id);
+        return facultyRepository.findById(id).orElse(null);
     }
 
     public Faculty editFaculty(Faculty faculty) {
+        logger.info("Was invoked method for edit faculty");
         return facultyRepository.save(faculty);
     }
 
-    public void deleteFaculty(Long id) {
+    public void deleteFaculty(long id) {
+        logger.info("Was invoked method for delete faculty with id = {}", id);
         facultyRepository.deleteById(id);
     }
 
-    public List<Faculty> getAllFaculties() {
+    public Collection<Faculty> getAllFaculties() {
+        logger.info("Was invoked method for get all faculties");
         return facultyRepository.findAll();
     }
 
     public Collection<Faculty> findByColor(String color) {
+        logger.info("Was invoked method for find faculties by color = {}", color);
         return facultyRepository.findByColor(color);
     }
 
