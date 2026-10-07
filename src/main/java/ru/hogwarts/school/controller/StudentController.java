@@ -3,11 +3,11 @@ package ru.hogwarts.school.controller;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
-import ru.hogwarts.school.model.Faculty;
-import org.springframework.http.ResponseEntity;
-import java.util.List;
+
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/student")
@@ -26,7 +26,7 @@ public class StudentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Student> getStudent(@PathVariable Long id) {
-        Student student = studentService.getStudent(id);
+        Student student = studentService.findStudent(id);
 
         if (student == null) {
             return ResponseEntity.notFound().build();
@@ -38,9 +38,11 @@ public class StudentController {
     @PutMapping
     public ResponseEntity<Student> editStudent(@RequestBody Student student) {
         Student foundStudent = studentService.editStudent(student);
+
         if (foundStudent == null) {
             return ResponseEntity.notFound().build();
         }
+
         return ResponseEntity.ok(foundStudent);
     }
 
@@ -56,14 +58,13 @@ public class StudentController {
         if (page != null && size != null) {
             return ResponseEntity.ok(studentService.getAllStudents(PageRequest.of(page, size)));
         }
+
         return ResponseEntity.ok(studentService.getAllStudents());
     }
 
     @GetMapping("/age")
-    public Collection<Student> findByAgeBetween(
-            @RequestParam int min,
-            @RequestParam int max) {
-
+    public Collection<Student> findByAgeBetween(@RequestParam int min,
+                                                @RequestParam int max) {
         return studentService.findByAgeBetween(min, max);
     }
 
