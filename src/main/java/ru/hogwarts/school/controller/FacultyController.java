@@ -3,10 +3,9 @@ package ru.hogwarts.school.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
-import ru.hogwarts.school.service.FacultyService;
 import ru.hogwarts.school.model.Student;
-import org.springframework.http.ResponseEntity;
-import java.util.List;
+import ru.hogwarts.school.service.FacultyService;
+
 import java.util.Collection;
 
 @RestController
@@ -26,21 +25,17 @@ public class FacultyController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Faculty> getFaculty(@PathVariable Long id) {
-        Faculty faculty = facultyService.getFaculty(id);
-
-        if (faculty == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(faculty);
+        return ResponseEntity.ok(facultyService.findFaculty(id));
     }
 
     @PutMapping
     public ResponseEntity<Faculty> editFaculty(@RequestBody Faculty faculty) {
         Faculty foundFaculty = facultyService.editFaculty(faculty);
+
         if (foundFaculty == null) {
             return ResponseEntity.notFound().build();
         }
+
         return ResponseEntity.ok(foundFaculty);
     }
 
@@ -51,12 +46,11 @@ public class FacultyController {
     }
 
     @GetMapping
-    public ResponseEntity<Collection<Faculty>> getAllFaculties(@RequestParam(required = false) String color,
-                                                               @RequestParam(required = false) String name) {
-        if (name != null || color != null) {
-            return ResponseEntity.ok(facultyService.findByNameOrColor(name, color));
-        }
-        return ResponseEntity.ok(facultyService.getAllFaculties());
+    public ResponseEntity<Collection<Faculty>> getAllFaculties(
+            @RequestParam(required = false) String color,
+            @RequestParam(required = false) String name) {
+
+        return ResponseEntity.ok(facultyService.findByNameOrColor(name, color));
     }
 
     @GetMapping("/longest-name")
