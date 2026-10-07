@@ -1,0 +1,4 @@
+﻿databaseChangeLog:
+  - include:
+      file: scripts/01-create-indexes.xml
+      relativeToChangelogFile: true
