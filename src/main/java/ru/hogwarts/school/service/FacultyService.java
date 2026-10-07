@@ -3,6 +3,7 @@ package ru.hogwarts.school.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
@@ -32,11 +33,11 @@ public class FacultyService {
         Faculty faculty = facultyRepository.findById(id).orElse(null);
 
         if (faculty == null) {
-            logger.warn("No faculty with id = {}", id);
-        } else {
-            logger.debug("Faculty with id = {} was found", id);
+            logger.error("There is no faculty with id = {}", id);
+            throw new FacultyNotFoundException(id);
         }
 
+        logger.debug("Faculty with id = {} was found", id);
         return faculty;
     }
 
