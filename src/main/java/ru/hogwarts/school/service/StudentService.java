@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
@@ -32,11 +33,11 @@ public class StudentService {
         Student student = studentRepository.findById(id).orElse(null);
 
         if (student == null) {
-            logger.warn("No student with id = {}", id);
-        } else {
-            logger.debug("Student with id = {} was found", id);
+            logger.error("There is no student with id = {}", id);
+            throw new StudentNotFoundException(id);
         }
 
+        logger.debug("Student with id = {} was found", id);
         return student;
     }
 
