@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
@@ -30,5 +31,13 @@ public class StudentControllerWebMvcTest {
         mockMvc.perform(get("/student/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Harry"));
+    }
+
+    @Test
+    void getStudentWhenStudentDoesNotExist() throws Exception {
+        when(studentService.findStudent(999L)).thenThrow(new StudentNotFoundException(999L));
+
+        mockMvc.perform(get("/student/999"))
+                .andExpect(status().isNotFound());
     }
 }
