@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Collection;
 
+import java.util.stream.Collectors;
+
 @Service
 public class StudentService {
 
@@ -58,5 +60,27 @@ public class StudentService {
         }
 
         return student.getFaculty();
+    }
+
+    public List<String> getNamesStartingWithA() {
+        return studentRepository.findAll().stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .filter(name -> name.startsWith("A"))
+                .sorted()
+                .collect(Collectors.toList());
+    }
+
+    public double getAverageAge() {
+        return studentRepository.findAll().stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0);
+    }
+
+    public long getSum() {
+        return java.util.stream.LongStream.rangeClosed(1, 1_000_000)
+                .parallel()
+                .sum();
     }
 }
